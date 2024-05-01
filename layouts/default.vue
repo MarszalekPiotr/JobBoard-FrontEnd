@@ -1,8 +1,9 @@
 <template>
     <v-app id="inspire">
+       
+        <LoginDialog> </LoginDialog>
 
-
-        <v-app-bar color = "layout">
+        <v-app-bar v-if = "userStore.$state.loggedIn === true" color = "layout">
             <v-app-bar-nav-icon v-if="mobile" @click="drawer = !drawer"></v-app-bar-nav-icon>
 
             <v-app-bar-title> JobBoard </v-app-bar-title>
@@ -10,7 +11,7 @@
             <VBtn icon ="mdi-theme-light-dark" title ="zmień motyw" @click="toggleTheme">  </VBtn>
         </v-app-bar>
 
-        <v-navigation-drawer color = "layout" :order="mobile ? -1 : 0" v-model="drawer">
+        <v-navigation-drawer v-if = "userStore.$state.loggedIn === true" color = "layout" :order="mobile ? -1 : 0" v-model="drawer">
             <VList>
                 <VListItem v-for ="item in menuItems" :key ="item.name" :title ="item.name" :prepend-icon="item.icon" :to ="item.url"> </VListItem>
             </VList>
@@ -18,7 +19,7 @@
 
         <v-main>
             <div class="pa-4">
-                <NuxtPage />
+                <NuxtPage v-if = "userStore.$state.loggedIn === true" />
             </div>
         </v-main>
     </v-app>

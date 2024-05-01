@@ -1,0 +1,49 @@
+<template>
+
+<VDialog :model-value ="showDialog" persistent width="400" scroll-strategy="none">
+    <VCard class="py-4">
+    <VCardTitle class="text-center">Logowanie</VCardTitle>
+    <div v-if="userStore.$state.loading === true" class="pa-4 d-flex justify-center">
+    <v-progress-circular indeterminate color="red"></v-progress-circular>
+   </div>
+    <VForm v-else @submit.prevent = "submit">
+        <VCardText>
+            <v-text-field class="mb-4" variant="outlined" v-model="loginViewModel.email" label="Email"></v-text-field>
+            <v-text-field class="mb-4" variant="outlined" v-model="loginViewModel.password" type="password" label="Hasło"></v-text-field>
+        </VCardText>
+        <VCardActions>
+            <v-btn class="mx-auto" color="primary" type="submit" variant="elevated">Zaloguj</v-btn>
+        </VCardActions>
+    </VForm>
+</VCard>
+</VDialog>
+
+</template>
+
+
+<style lang="scss" scoped>
+
+</style>
+
+<script setup>
+
+const userStore = useUserStore();
+userStore.getLoggedUser();
+const showDialog = computed(() => {
+   return  userStore.$state.loggedIn === false || userStore.$state.loading;
+})
+
+const loginViewModel =
+ref(
+{
+    email : "",
+    password : ""
+
+})
+
+const submit = () => {
+    console.log(loginViewModel)
+}
+
+</script>
+
