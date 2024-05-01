@@ -29,11 +29,13 @@ import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import { useTheme } from 'vuetify';
 import { useStorage } from '@vueuse/core';
+import { useUserStore } from '~/stores/userStore';
 
 const currentTheme  = useStorage('currentTheme','light')
 const theme = useTheme();
 const { mobile } = useDisplay();
 const drawer = ref(null)
+const userStore = useUserStore();
 
 const menuItems = [
     {
@@ -55,11 +57,14 @@ function toggleTheme(){
     let newTheme = theme.global.current.value.dark ? 'light' : 'dark';
     theme.global.name.value = newTheme;
     currentTheme.value = newTheme;
+    userStore.getLoggedUser();
 
 }
 
 onMounted(() => {
     theme.global.name.value = currentTheme.value;
+     userStore.getLoggedUser();
+
 })
 
 </script>

@@ -1,9 +1,9 @@
 import { hash } from 'ohash'
 
-export const useWebApiFetch = function (request, opts) {
+export  const  useWebApiFetch =  function (request, opts) {
     const config = useRuntimeConfig()
 
-    return useFetch(request, { baseURL: config.public.BASE_URL,
+    return  useFetch(request, { baseURL: config.public.BASE_URL,
         onRequest({ request, options }) {
             // Set the request headers
         },
