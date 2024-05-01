@@ -7,6 +7,11 @@ export default defineNuxtConfig({
 	build: {
     transpile: ['vuetify'],
   },
+  runtimeConfig: {
+    public: {
+      BASE_URL: 'http://localhost:5073', //replace with ENV: NUXT_PUBLIC_BASE_URL 
+    },
+  },
   modules: [
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
