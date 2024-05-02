@@ -6,14 +6,15 @@
     <div v-if="userStore.$state.loading === true" class="pa-4 d-flex justify-center">
     <v-progress-circular indeterminate color="red"></v-progress-circular>
    </div>
-    <VForm v-else @submit.prevent = "submit">
+    <VForm v-else @submit.prevent = "login" :disabled= "loading" >
         <VCardText>
             <v-text-field class="mb-4" variant="outlined" v-model="loginViewModel.email" label="Email"></v-text-field>
             <v-text-field class="mb-4" variant="outlined" v-model="loginViewModel.password" type="password" label="Hasło"></v-text-field>
         </VCardText>
         <VCardActions>
-            <v-btn class="mx-auto" color="primary" type="submit" variant="elevated">Zaloguj</v-btn>
+            <v-btn class="mx-auto" color="primary" type="submit" :loading="loading" variant="elevated">Zaloguj</v-btn>
         </VCardActions>
+        <VAlert v-if="errorMsg" type="error" variant="tonal">{{ errorMsg }}</VAlert>
     </VForm>
 </VCard>
 </VDialog>
@@ -26,6 +27,8 @@
 </style>
 
 <script setup>
+
+
 
 const userStore = useUserStore();
 userStore.getLoggedUser();
@@ -43,6 +46,29 @@ ref(
 
 const submit = () => {
     console.log(loginViewModel)
+}
+
+const loading = ref(false);
+const errorMsg = ref("");
+
+const login = () =>{
+     errorMsg.value = "";
+     loading.value = true;
+
+    useWebApiFetch("/User/Login", {
+        method: 'POST',
+        body:{...loginViewModel.value},
+        onResponseError: ({response}) => {
+               errorMsg.value = "Błąd logowania";
+        }
+       })
+       .then((response) => {
+         if(response.data.value !== null){
+            userStore.getLoggedUser();
+         }
+       }).finally(() => {
+          loading.value = false;
+       })
 }
 
 </script>
