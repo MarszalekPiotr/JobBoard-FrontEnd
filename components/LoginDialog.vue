@@ -6,10 +6,10 @@
     <div v-if="userStore.$state.loading === true" class="pa-4 d-flex justify-center">
     <v-progress-circular indeterminate color="red"></v-progress-circular>
    </div>
-    <VForm v-else @submit.prevent = "login" :disabled= "loading" >
+    <VForm v-else @submit.prevent = "submit" :disabled= "loading" >
         <VCardText>
-            <v-text-field class="mb-4" variant="outlined" v-model="loginViewModel.email" label="Email"></v-text-field>
-            <v-text-field class="mb-4" variant="outlined" v-model="loginViewModel.password" type="password" label="Hasło"></v-text-field>
+            <v-text-field class="mb-4" variant="outlined" :rules =[ruleRequired,ruleEmail] v-model="loginViewModel.email" label="Email"></v-text-field>
+            <v-text-field class="mb-4" variant="outlined" :rules =[ruleRequired] v-model="loginViewModel.password" type="password" label="Hasło"></v-text-field>
         </VCardText>
         <VCardActions>
             <v-btn class="mx-auto" color="primary" type="submit" :loading="loading" variant="elevated">Zaloguj</v-btn>
@@ -27,9 +27,8 @@
 </style>
 
 <script setup>
+import { useFormRules } from '~/utils/fromValidationRules';
 import { UseErrorMessages } from '~/utils/getErrorMessages';
-
-
 
 
 const userStore = useUserStore();
@@ -46,9 +45,16 @@ ref(
 
 })
 
-// const submit = () => {
-//     console.log(loginViewModel)
-//}
+
+const {ruleEmail , ruleRequired} = useFormRules();
+ const  submit = async (event) => {
+    const {valid} = await event;
+    if(valid){
+        login();
+    }
+}
+
+
 
 const loading = ref(false);
 const errorMsg = ref("");
