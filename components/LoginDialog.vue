@@ -14,7 +14,7 @@
         <VCardActions>
             <v-btn class="mx-auto" color="primary" type="submit" :loading="loading" variant="elevated">Zaloguj</v-btn>
         </VCardActions>
-        <VAlert v-if="errorMsg" type="error" variant="tonal">{{ errorMsg }}</VAlert>
+        <VAlert v-if="errorMsg" type="error" variant="elevated">{{ errorMsg }}</VAlert>
     </VForm>
 </VCard>
 </VDialog>
@@ -27,6 +27,8 @@
 </style>
 
 <script setup>
+import { UseErrorMessages } from '~/utils/getErrorMessages';
+
 
 
 
@@ -44,9 +46,9 @@ ref(
 
 })
 
-const submit = () => {
-    console.log(loginViewModel)
-}
+// const submit = () => {
+//     console.log(loginViewModel)
+//}
 
 const loading = ref(false);
 const errorMsg = ref("");
@@ -59,7 +61,8 @@ const login = () =>{
         method: 'POST',
         body:{...loginViewModel.value},
         onResponseError: ({response}) => {
-               errorMsg.value = "Błąd logowania";
+            console.log("error occure");
+               errorMsg.value = getErrorMessages(response,messageMap,fieldMap)
         }
        })
        .then((response) => {
@@ -71,5 +74,12 @@ const login = () =>{
        })
 }
 
+const {getErrorMessages} = UseErrorMessages();
+
+const messageMap ={ "Invalid login or password": "Niepoprawny Login Lub Hasło",
+                     "EmailValidator": "Błędny email",
+                      "NotEmptyValidator" : "Puste dane"   };
+const fieldMap = {"Email" : "Email",
+                 "Password": "hasło"                   }
 </script>
 
