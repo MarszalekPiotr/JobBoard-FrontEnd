@@ -7,8 +7,8 @@
             <v-card-text class="px-4" style="height: 300px;">
                 <VCardTitle class="text-center">Wybierz konto</VCardTitle>
                 <v-radio-group v-model="dialog" column>
-                    <v-radio v-for="(account, index) in accounts" :key="account.accountId" :label="account.accountName"
-                        :value="account.accountId"></v-radio>
+                    <v-radio v-for="(account, index) in accounts"  :key="account.accountId" :label="account.accountName"
+                        :value="account.accountId" ></v-radio>
 
                 </v-radio-group>
             </v-card-text>
@@ -20,7 +20,7 @@
 
                 <v-spacer></v-spacer>
 
-                <v-btn color="surface-variant" text="Save" variant="flat" @click="submitSelectedAccount"></v-btn>
+                <v-btn color="surface-variant" text="Wybierz" :loading="loading" variant="flat" @click="submitSelectedAccount"></v-btn>
             </v-card-actions>
         </v-dialog>
     </div>
@@ -42,24 +42,49 @@ accountStore.getSelectedAccount();
 accountStore.getAccountsForCurrentUser();
 
 const accounts = computed(() => {
+    console.log(accounts);
    return  accountStore.$state.availableAccounts;
 })
 // let accounts = accountStore.$state.availableAccounts;
 
+const errorMsg = ref('');
+const loading= ref(false);
 const dialog = ref(null);
+const errorMap = { "Unauthorized" : "Odmowa dostępu"}
 function submitSelectedAccount() {
+    loading.value = true;
     if (dialog.value) {
       // Access the selected account from the dialog variable
       const selectedAccount = dialog.value
       console.log('Selected Account:', selectedAccount)
-
+       
+       useWebApiFetch('/User/SetCurrentAccount', 
+       {method:'POST' ,
+        body:{"accountId" : selectedAccount},
+        OnResponseError: ({response}) =>{
+        errorMsg.value = getErrorMessage(response, errorMap  ,{} )
+        }
+          })
+          .then((response) => {
+                if(response.data.value){
+                    accountStore.getSelectedAccount();
+                    
+                }
+          })
+          .finally(() => {
+            loading.value = false;
+          }) 
+      
+      
       // Perform actions with the selected account, e.g., save it
       // Example:
       // accountStore.saveSelectedAccount(selectedAccount)
 
       // Close the dialog
-      dialog.value = null
+      
     }
   }
+const companyAccountType = "Company";
+const candidateAccountType = "Candidate";
 
 </script>

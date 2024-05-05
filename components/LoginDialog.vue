@@ -30,7 +30,7 @@
 import { useFormRules } from '~/utils/fromValidationRules';
 import { UseErrorMessages } from '~/utils/getErrorMessages';
 
-
+const accountStore = UseAccountStore();
 const userStore = useUserStore();
 userStore.getLoggedUser();
 const showDialog = computed(() => {
@@ -51,6 +51,7 @@ const {ruleEmail , ruleRequired} = useFormRules();
     const {valid} = await event;
     if(valid){
         login();
+       
     }
 }
 
@@ -74,6 +75,9 @@ const login = () =>{
        .then((response) => {
          if(response.data.value !== null){
             userStore.getLoggedUser();
+            accountStore.getAccountsForCurrentUser();
+            loginViewModel.value.password = '';
+            
          }
        }).finally(() => {
           loading.value = false;

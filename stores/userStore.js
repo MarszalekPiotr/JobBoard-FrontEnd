@@ -33,7 +33,7 @@ export const useUserStore = defineStore({
 
     },
     logOut(){
-         useWebApiFetch('/User/Logout', {_method:'POST'})
+         useWebApiFetch('/User/Logout', {method:'POST'})
          .then((response) =>{
              if(response.value){
                 this.loggedIn = false;

@@ -32,7 +32,13 @@
                 <VListItem v-for="item in menuItems" :key="item.name" :title="item.name" :prepend-icon="item.icon"
                     :to="item.url">
                 </VListItem>
+                 
             </VList>
+            <template v-slot:append>
+                    <v-btn  block :prepend-icon="mdi-login"  @click ="logout"> 
+                       Wyloguj się 
+                    </v-btn>
+                    </template>
         </v-navigation-drawer>
 
         <v-main>
@@ -58,6 +64,14 @@ const drawer = ref(null)
 const userStore = useUserStore();
 const accountStore = UseAccountStore();
 
+
+const logout = () =>{
+    
+    userStore.logOut();
+    
+    
+
+}
 
 const companyAccountType = "Company";
 const candidateAccountType = "Candidate";
