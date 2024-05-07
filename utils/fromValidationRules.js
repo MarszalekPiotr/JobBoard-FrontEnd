@@ -11,6 +11,7 @@ export const useFormRules = () =>{
                                 },
       ruleRequired: (value) => {
          return (!!value || "Wymagane pole");
-      }                             
+      }
+                                
    }
 }
