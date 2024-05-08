@@ -13,4 +13,12 @@
 
 <script setup>
 
+const userStore = useUserStore();
+const accountStore = UseAccountStore();
+onMounted( () => {
+  userStore.getLoggedUser();
+  accountStore.getAccountsForCurrentUser();
+  console.log("elooo");
+
+});
 </script>

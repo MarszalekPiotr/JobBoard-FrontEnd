@@ -11,9 +11,9 @@
                 <VCardText>
                     <v-text-field class="mb-4" variant="outlined" :rules=[]
                         v-model="registrationViewModel.email" label="Email"></v-text-field>
-                    <v-text-field class="mb-4" variant="outlined" :rules=[]
+                    <v-text-field class="mb-4" variant="outlined" :rules=[ruleRequired]
                         v-model="registrationViewModel.password" type="password" label="Hasło"></v-text-field>
-                        <v-text-field class="mb-4" variant="outlined" :rules=[]
+                        <v-text-field class="mb-4" variant="outlined" :rules=[ruleRequired,rules.samePassword]
                         v-model="registrationViewModel.repeatPassword" type="password" label="powtórz Hasło"></v-text-field>
                 </VCardText>
                 <VCardActions>
@@ -32,6 +32,7 @@
 <style></style>
 
 <script setup>
+const userStore= useUserStore();
 const { getErrorMessages } = UseErrorMessages();
 const { ruleRequired, ruleEmail } = useFormRules();
 const errorMsg = ref('');
@@ -61,12 +62,12 @@ const createUser = () => {
         method: 'POST',
         body: { ...registrationViewModel.value },
         onErrorResponse: ({ response }) => {
-            errorMsg.value = getErrorMessages(response, {}, {})
+            errorMsg.value = getErrorMessages(response, {"User With this Email already exists": "Użytkownik z takim adresem e-mail juz istnieje"}, {})
         },
     })
-    .then(({response}) => {
-         if(response.value){
-            this.userCreated = true 
+    .then((response) => {
+         if(response.data.value !== null){
+          userStore.getLoggedUser();
          }
     })
     .finally(() => {
