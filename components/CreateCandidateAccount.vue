@@ -77,7 +77,7 @@ const createUser = () => {
     useWebApiFetch('/User/CreateCandidateAccount', {
         method: 'POST',
         body: { ...CreateCandidateAccountViewModel.value },
-        onErrorResponse: ({ response }) => {
+        onResponseError: ({ response }) => {
             errorMsg.value = getErrorMessages(response, {}, {})
         },
     })

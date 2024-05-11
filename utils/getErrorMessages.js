@@ -7,16 +7,16 @@ export const UseErrorMessages = () =>{
 
         if(response._data){
             console.log(response);
-            if(response.status == 401){
+            if(response.status === 401){
                 return "Brak dostępu";
             }
-            else if(response.status == 422){
+            else if(response.status === 422){
                 let messages = [];
                  response._data.errors.forEach((error) => {
                     console.log(error.error);
                     messages.push(`błąd: ${messageMapUnion[error.error] ?? error.error} w polu: ${fieldMapUnion[error.fieldName]?? error.fieldName }`);
                  }); 
-                 messages.push('HERE');
+                 
                  return messages.join('\n');
                  
                  
@@ -38,7 +38,15 @@ export const UseErrorMessages = () =>{
 }
 
 const messageMapFixed = { 
+    "MinimumLengthValidator" : "Za mało znaków",
+     "PredicateValidator" : "Dane nie spełniają wymogów"
 
 }
 
-const fieldMapFixed ={ }
+const fieldMapFixed = {
+    "Name" : "Nazwa",
+    "Description": "Opis",
+     "NIP" : "Numer NIP",
+     "ContactEmail" : "E-mail kontaktowy"
+    
+ }

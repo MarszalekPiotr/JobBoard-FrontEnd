@@ -61,7 +61,7 @@ const createUser = () => {
     useWebApiFetch('/User/CreateUser', {
         method: 'POST',
         body: { ...registrationViewModel.value },
-        onErrorResponse: ({ response }) => {
+        onResponseError: ({ response }) => {
             errorMsg.value = getErrorMessages(response, {"User With this Email already exists": "Użytkownik z takim adresem e-mail juz istnieje"}, {})
         },
     })

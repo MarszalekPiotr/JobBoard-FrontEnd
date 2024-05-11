@@ -69,20 +69,21 @@ const createUser = () => {
     useWebApiFetch('/User/CreateCompanyAccount', {
         method: 'POST',
         body: { ...CreateCompanyAccountViewModel.value },
-        onErrorResponse: ({ response }) => {
+        onResponseError: ({ response }) => {
             errorMsg.value = getErrorMessages(response, {messageMap}, {fieldMap})
-            console.log("błąd");
-            console.log(CreateCompanyAccountViewModel.value);
-            console.log(reponse);
+            
         },
     })
-        .then(( response ) => {
-            if (response.data.value) {
+        .then((response) => {
+            if (response.data.value !== null) { 
+                console.log(response.data.value);
                 router.push({ path: '/' })  
             }
+            
         })
         .finally(() => {
             loading.value = false;
+            console.log(CreateCompanyAccountViewModel.value);
 
         })
 
