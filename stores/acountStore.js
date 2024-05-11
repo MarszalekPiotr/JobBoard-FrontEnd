@@ -68,7 +68,7 @@ export const UseAccountStore = defineStore({
     }
 )
 
-const companyAccountType = "Company";
-const candidateAccountType = "Candidate";
+const companyAccountType = "CompanyAccount";
+const candidateAccountType = "CandidateAccount";
 
  

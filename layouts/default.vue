@@ -22,8 +22,8 @@
                             {{ userStore.$state.userData.email[0].toUpperCase() }}
                         </v-avatar>
                     </template>
-                    <VListItemTitle v-if="accountStore.$state.accountType === companyAccountType ">{{ accountStore.$state.accountCompany.name}} </VListItemTitle>
-                    <VListItemTitle v-if="accountStore.$state.accountType === candidateAccountType ">{{ accountStore.$state.acountCandidate.name}} </VListItemTitle>
+                    <VListItemTitle v-if="accountStore.$state.accountType === companyAccountType">{{ accountStore.$state.accountCompany.name}} </VListItemTitle>
+                    <VListItemTitle v-if="accountStore.$state.accountType === candidateAccountType">{{ accountStore.$state.acountCandidate.name}} </VListItemTitle>
                     <VListItemTitle v-if="accountStore.$state.accountSelected === false">Nie wybrano konta </VListItemTitle>
                     <VListItemSubtitle v-if="userStore.$state.userData?.email">{{ userStore.$state.userData.email }}
                     </VListItemSubtitle>
@@ -63,18 +63,16 @@ const { mobile } = useDisplay();
 const drawer = ref(null)
 const userStore = useUserStore();
 const accountStore = UseAccountStore();
-
+const router = useRouter();
 
 const logout = () =>{
-    
     userStore.logOut();
-    
-    
-
+    window.location.reload();
 }
 
-const companyAccountType = "Company";
-const candidateAccountType = "Candidate";
+const companyAccountType = "CompanyAccount";
+const candidateAccountType = "CandidateAccount";
+
  
 const menuItems = [
     {

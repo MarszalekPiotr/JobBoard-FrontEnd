@@ -1,7 +1,7 @@
 <template>
 
 
-    <VDialog :model-value="!userCreated" persistent width="400" scroll-strategy="none">
+    <VDialog :model-value="!props.state.userCreated" persistent width="400" scroll-strategy="none">
         <VCard class="py-4">
             <VCardTitle class="text-center">Rejestracja</VCardTitle>
             <div v-if="loading" class="pa-4 d-flex justify-center">
@@ -45,7 +45,7 @@ const registrationViewModel = ref({
 const rules = {
     samePassword : (v) => v === registrationViewModel.value.password || 'Hasła różnią się od siebie',
 }
-defineProps(['userCreated'])
+const props = defineProps(['userCreated' ,'state'])
 
 const submit = async (event) => {
 

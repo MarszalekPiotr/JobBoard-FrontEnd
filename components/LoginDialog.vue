@@ -13,6 +13,7 @@
         </VCardText>
         <VCardActions>
             <v-btn class="mx-auto" color="primary" type="submit" :loading="loading" variant="elevated">Zaloguj</v-btn>
+            <v-btn class="mx-auto" color="primary"> <RouterLink to="registration">  Zarejestruj się </RouterLink>          </v-btn>
         </VCardActions>
         <VAlert v-if="errorMsg" type="error" variant="elevated">{{ errorMsg }}</VAlert>
     </VForm>

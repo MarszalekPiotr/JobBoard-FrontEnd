@@ -3,14 +3,14 @@
         <v-dialog class="custom-dialog"  :model-value="accountStore.$state.accountSelected === false && userStore.$state.loggedIn === true " persistent width="auto" scrollable>
 
             <v-divider class="mt-3"></v-divider>
-
+            
             <v-card-text class="px-4" style="height: 300px;">
                 <VCardTitle class="text-center">Wybierz konto</VCardTitle>
                 <v-radio-group v-model="dialog" column>
                     <v-radio v-for="(account, index) in accounts"  :key="account.accountId" :label="account.accountName"
                         :value="account.accountId" ></v-radio>
-
-                </v-radio-group>
+             
+                 </v-radio-group>
             </v-card-text>
 
             <v-divider></v-divider>
@@ -66,7 +66,7 @@ function submitSelectedAccount() {
         }
           })
           .then((response) => {
-                if(response.data.value){
+                if(response.data.value !== null){
                     accountStore.getSelectedAccount();
                     
                 }

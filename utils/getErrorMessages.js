@@ -10,14 +10,15 @@ export const UseErrorMessages = () =>{
             if(response.status == 401){
                 return "Brak dostępu";
             }
-            else if(response.status === 422){
+            else if(response.status == 422){
                 let messages = [];
                  response._data.errors.forEach((error) => {
                     console.log(error.error);
                     messages.push(`błąd: ${messageMapUnion[error.error] ?? error.error} w polu: ${fieldMapUnion[error.fieldName]?? error.fieldName }`);
                  }); 
-                 
+                 messages.push('HERE');
                  return messages.join('\n');
+                 
                  
             }
             else {
@@ -30,7 +31,7 @@ export const UseErrorMessages = () =>{
 
 
         }
-        return ""
+        return "Błąd"
           
     }
     }
