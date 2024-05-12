@@ -37,7 +37,7 @@
 <script setup>
 
 const router = useRouter();
-
+const globalMessageStore = useMessageStore();
 const { getErrorMessages } = UseErrorMessages();
 const { ruleRequired, ruleEmail } = useFormRules();
 const errorMsg = ref('');
@@ -76,14 +76,14 @@ const createUser = () => {
     })
         .then((response) => {
             if (response.data.value !== null) { 
-                console.log(response.data.value);
+                globalMessageStore.showSuccessMessage("utworzono konto organizacji")
                 router.push({ path: '/' })  
             }
             
         })
         .finally(() => {
             loading.value = false;
-            console.log(CreateCompanyAccountViewModel.value);
+            
 
         })
 

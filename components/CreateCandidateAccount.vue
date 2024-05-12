@@ -43,7 +43,7 @@
 <script setup>
 
 const router = useRouter();
-
+const globalMessageStore = useMessageStore();
 const { getErrorMessages } = UseErrorMessages();
 const { ruleRequired, ruleEmail } = useFormRules();
 const errorMsg = ref('');
@@ -83,6 +83,7 @@ const createUser = () => {
     })
     .then((response) => {
          if(response.data.value){
+            globalMessageStore.showSuccessMessage("utworzono standardowe konto");
             router.push({ path: '/' })   
          }
     })

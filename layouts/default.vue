@@ -43,7 +43,7 @@
 
         <v-main>
             <div class="pa-4">
-                <NuxtPage v-if="userStore.$state.loggedIn === true" />
+                <NuxtPage v-if="userStore.$state.loggedIn === true && accountStore.$state.accountSelected === true" />
             </div>
         </v-main>
     </v-app>
@@ -56,6 +56,8 @@ import { useTheme } from 'vuetify';
 import { useStorage } from '@vueuse/core';
 import { useUserStore } from '~/stores/userStore';
 import { UseAccountStore } from '~/stores/acountStore';
+
+
 
 const currentTheme = useStorage('currentTheme', 'light')
 const theme = useTheme();
@@ -85,6 +87,11 @@ const menuItems = [
         name: "powiadomienia",
         icon: "mdi-bell"
     },
+    {
+        url:"/myAccounts",
+        name: "Moje Konta",
+        icon: "mdi-account"
+    }
 
 
 ]
@@ -103,7 +110,11 @@ onMounted(() => {
     userStore.getLoggedUser();
     accountStore.getAccountsForCurrentUser();
     accountStore.getSelectedAccount();
+    console.log(accountStore.$state.availableAccounts);
+    console.log(userStore.$state.loggedIn === true)
+    
    
+    
 
 })
 

@@ -33,6 +33,7 @@ import { UseErrorMessages } from '~/utils/getErrorMessages';
 
 const accountStore = UseAccountStore();
 const userStore = useUserStore();
+const globalMessageStore = useMessageStore();
 userStore.getLoggedUser();
 const showDialog = computed(() => {
    return  userStore.$state.loggedIn === false || userStore.$state.loading;
@@ -77,7 +78,8 @@ const login = () =>{
          if(response.data.value !== null){
             userStore.getLoggedUser();
             accountStore.getAccountsForCurrentUser();
-            loginViewModel.value.password = '';
+            loginViewModel.value.password = ''
+            globalMessageStore.showSuccessMessage("Pomyślnie zalogowano")
             
          }
        }).finally(() => {

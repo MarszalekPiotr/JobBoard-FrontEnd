@@ -1,19 +1,37 @@
 <template>
+  <CreateUserDialog :state="state"></CreateUserDialog>
+  
+  <div class="center-container">
+    <h1 v-if="!state.accountCreated && state.userCreated" class="main-heading">Nie posiadasz jeszcze konta - załóż je, aby w pełni korzystać z serwisu</h1>
+    <v-btn v-if="!state.candidateAccountCreated && state.userCreated" @click="options.candidateAccount = true" class="primary-btn">Załóż profil kandydata</v-btn>
+    <v-btn v-if="state.userCreated" @click="options.companyAccount = true" class="colorful-btn">Załóż profil firmy</v-btn>
+  </div>
 
-  <CreateUserDialog :state="state"> </CreateUserDialog>
-   
-   <div>
-    <h1 v-if ="!state.accountCreated && state.userCreated"> Nie posiadasz jeszcze konta - założ je aby w pełni korzystać z seriwsu</h1>
-    <v-btn v-if = "!state.candidateAccountCreated && state.userCreated" @click ="options.candidateAccount = true">  założ profil kandydta    </v-btn>
-    <v-btn  v-if ="state.userCreated" @click ="options.companyAccount = true">  założ profil firmy     </v-btn>
-   </div>
-
-  <CreateCandidateAccount  :state = "state" :options="options"  > </CreateCandidateAccount>
-  <CreateCompanyAccount :state = "state" :options="options"> </CreateCompanyAccount>
-
+  <CreateCandidateAccount :state="state" :options="options"></CreateCandidateAccount>
+  <CreateCompanyAccount :state="state" :options="options"></CreateCompanyAccount>
 </template>
 
-<style></style>
+<style>
+.center-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.main-heading {
+  font-size: 24px; /* Adjust font size */
+  text-align: center;
+  margin-bottom: 24px; /* Add margin for spacing */
+}
+
+.colorful-btn {
+  color: #fff; /* Text color */
+  background-color: #4caf50; /* Button background color */
+}
+</style>
+
 <script setup>
 
 
@@ -48,7 +66,7 @@ const companyAccountType = "CompanyAccount";
 const candidateAccountType = "CandidateAccount";
 
 
-const showOptions = computed(() => { return state.value.userCreated && !state.value.accountCreated && !state.value.optionSelected})
+// const showOptions = computed(() => { return state.value.userCreated && !state.value.accountCreated && !state.value.optionSelected})
 
 definePageMeta({
   layout: "registration",
