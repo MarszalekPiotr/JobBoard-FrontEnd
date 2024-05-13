@@ -31,12 +31,13 @@
 import { useFormRules } from '~/utils/fromValidationRules';
 import { UseErrorMessages } from '~/utils/getErrorMessages';
 
+const authStore = useAuthStore();
 const accountStore = UseAccountStore();
 const userStore = useUserStore();
 const globalMessageStore = useMessageStore();
-userStore.getLoggedUser();
+
 const showDialog = computed(() => {
-   return  userStore.$state.loggedIn === false || userStore.$state.loading;
+   return  !authStore.$state.userLoggedIn || authStore.$state.loading;
 })
 
 const loginViewModel =
@@ -75,9 +76,8 @@ const login = () =>{
         }
        })
        .then((response) => {
-         if(response.data.value !== null){
-            userStore.getLoggedUser();
-            accountStore.getAccountsForCurrentUser();
+         if(response.data.value){
+            authStore.checkAuthStatus();
             loginViewModel.value.password = ''
             globalMessageStore.showSuccessMessage("Pomyślnie zalogowano")
             

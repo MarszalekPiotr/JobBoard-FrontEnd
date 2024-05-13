@@ -77,7 +77,7 @@ const errorMsg = ref('')
 const {getErrorMessages} = UseErrorMessages();
 const errorMap = { "Unauthorized" : "Odmowa dostępu"}
 const loading = ref(false);
-;
+const router = useRouter();
 const selectAccount = (accountId) =>{
        loading.value = true; 
     useWebApiFetch('/User/SetCurrentAccount', 
@@ -96,6 +96,7 @@ const selectAccount = (accountId) =>{
           })
           .finally(() => {
             loading.value = false;
+            router.push({ path: '/' }) ; 
 
           }) 
 }
@@ -114,7 +115,7 @@ console.log(companyAccounts.value);
 
 const companyAccountType = "CompanyAccount";
 const candidateAccountType = "CandidateAccount";
-// definePageMeta({
-//   layout: "default",
-// });
+definePageMeta({
+  layout: "default",
+});
 </script>

@@ -1,7 +1,7 @@
 <template>
 
 
-    <VDialog :model-value="!props.state.userCreated" persistent width="400" scroll-strategy="none">
+    <VDialog :model-value="!authStore.userLoggedIn" persistent width="400" scroll-strategy="none">
         <VCard class="py-4">
             <VCardTitle class="text-center">Rejestracja</VCardTitle>
             <div v-if="loading" class="pa-4 d-flex justify-center">
@@ -34,6 +34,7 @@
 <script setup>
 const globalMessageStore = useMessageStore();
 const userStore= useUserStore();
+const authStore = useAuthStore();
 const { getErrorMessages } = UseErrorMessages();
 const { ruleRequired, ruleEmail } = useFormRules();
 const errorMsg = ref('');

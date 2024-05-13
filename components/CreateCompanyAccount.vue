@@ -35,13 +35,14 @@
 <style></style>
 
 <script setup>
-
+const authStore = useAuthStore();
 const router = useRouter();
+const accountStore = UseAccountStore();
 const globalMessageStore = useMessageStore();
 const { getErrorMessages } = UseErrorMessages();
 const { ruleRequired, ruleEmail } = useFormRules();
 const errorMsg = ref('');
-const loading = ref(false);
+const loading = computed( () => { return authStore.$state.loading })
 const CreateCompanyAccountViewModel = ref({
     Name: '',
     Description: '',
@@ -52,43 +53,22 @@ const CreateCompanyAccountViewModel = ref({
 const rules = {
     // samePassword : (v) => v === registrationViewModel.value.password || 'Hasła różnią się od siebie',
 }
-const props = defineProps(['state', 'options'])
+const props = defineProps([ 'options'])
 
-const show = computed(() => { return props.state.userCreated && props.options.companyAccount })
+const show = computed(() => { return authStore.userLoggedIn && props.options.companyAccount })
 const submit = async (event) => {
 
     const { valid } = await event;
     if (valid) {
-        createUser();
+        accountStore.createCompanyAccount(CreateCompanyAccountViewModel);
     }
 
 }
 
-const createUser = () => {
-    loading.value = true;
-    useWebApiFetch('/User/CreateCompanyAccount', {
-        method: 'POST',
-        body: { ...CreateCompanyAccountViewModel.value },
-        onResponseError: ({ response }) => {
-            errorMsg.value = getErrorMessages(response, {messageMap}, {fieldMap})
-            
-        },
-    })
-        .then((response) => {
-            if (response.data.value !== null) { 
-                globalMessageStore.showSuccessMessage("utworzono konto organizacji")
-                router.push({ path: '/' })  
-            }
-            
-        })
-        .finally(() => {
-            loading.value = false;
-            
-
-        })
 
 
-}
+
+
 
 
 const messageMap ={ "Invalid login or password": "Niepoprawny Login Lub Hasło",

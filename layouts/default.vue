@@ -3,9 +3,9 @@
 
         <LoginDialog> </LoginDialog>
 
-        <AccountDialog>  </AccountDialog>
+        <AccountDialog> </AccountDialog>
 
-        <v-app-bar v-if="userStore.$state.loggedIn === true" color="layout">
+        <v-app-bar v-if="authStore.$state.userLoggedIn" color="layout">
             <v-app-bar-nav-icon v-if="mobile" @click="drawer = !drawer"></v-app-bar-nav-icon>
 
             <v-app-bar-title> JobBoard </v-app-bar-title>
@@ -13,37 +13,41 @@
             <VBtn icon="mdi-theme-light-dark" title="zmień motyw" @click="toggleTheme"> </VBtn>
         </v-app-bar>
 
-        <v-navigation-drawer v-if="userStore.$state.loggedIn === true" color="layout" :order="mobile ? -1 : 0"
+        <v-navigation-drawer v-if="authStore.$state.userLoggedIn" color="layout" :order="mobile ? -1 : 0"
             v-model="drawer">
             <VList>
                 <v-list-item lines="two">
                     <template v-slot:prepend>
                         <v-avatar color="brand" v-if="userStore.$state.userData?.email">
-                            {{ userStore.$state.userData.email[0].toUpperCase() }}
+                            {{ authStore.$state.currentUser.email[0].toUpperCase() }}
                         </v-avatar>
                     </template>
-                    <VListItemTitle v-if="accountStore.$state.accountType === companyAccountType">{{ accountStore.$state.accountCompany.name}} </VListItemTitle>
-                    <VListItemTitle v-if="accountStore.$state.accountType === candidateAccountType">{{ accountStore.$state.acountCandidate.name}} </VListItemTitle>
-                    <VListItemTitle v-if="accountStore.$state.accountSelected === false">Nie wybrano konta </VListItemTitle>
-                    <VListItemSubtitle v-if="userStore.$state.userData?.email">{{ userStore.$state.userData.email }}
+                    <VListItemTitle v-if="authStore.$state.currentCompanyAccount">{{
+                        accountStore.$state.accountCompany.name }} </VListItemTitle>
+                    <VListItemTitle v-if="authStore.$state.currentCandidateAccount">{{
+                        accountStore.$state.acountCandidate.name }} </VListItemTitle>
+                    <VListItemTitle v-if="authStore.$state.loggedInNoAccountSelected">Nie wybrano konta
+                    </VListItemTitle>
+                    <VListItemSubtitle v-if="authStore.$state.currentUser?.email">{{ authStore.$state.currentUser.email
+                        }}
                     </VListItemSubtitle>
                 </v-list-item>
                 <VDivider></VDivider>
                 <VListItem v-for="item in menuItems" :key="item.name" :title="item.name" :prepend-icon="item.icon"
                     :to="item.url">
                 </VListItem>
-                 
+
             </VList>
             <template v-slot:append>
-                    <v-btn  block :prepend-icon="mdi-login"  @click ="logout"> 
-                       Wyloguj się 
-                    </v-btn>
-                    </template>
+                <v-btn block :prepend-icon="mdi - login" @click="logout">
+                    Wyloguj się
+                </v-btn>
+            </template>
         </v-navigation-drawer>
 
         <v-main>
             <div class="pa-4">
-                <NuxtPage v-if="userStore.$state.loggedIn === true && accountStore.$state.accountSelected === true" />
+                <NuxtPage v-if="authStore.$state.loggedInAccountSelected" />
             </div>
         </v-main>
     </v-app>
@@ -66,8 +70,9 @@ const drawer = ref(null)
 const userStore = useUserStore();
 const accountStore = UseAccountStore();
 const router = useRouter();
+const authStore = useAuthStore();
 
-const logout = () =>{
+const logout = () => {
     userStore.logOut();
     window.location.reload();
 }
@@ -75,7 +80,7 @@ const logout = () =>{
 const companyAccountType = "CompanyAccount";
 const candidateAccountType = "CandidateAccount";
 
- 
+
 const menuItems = [
     {
         url: "/applications",
@@ -88,7 +93,7 @@ const menuItems = [
         icon: "mdi-bell"
     },
     {
-        url:"/myAccounts",
+        url: "/myAccounts",
         name: "Moje Konta",
         icon: "mdi-account"
     }
@@ -105,16 +110,9 @@ function toggleTheme() {
 
 }
 
-onMounted(() => {
+onMounted(async () => {
     theme.global.name.value = currentTheme.value;
-    userStore.getLoggedUser();
-    accountStore.getAccountsForCurrentUser();
-    accountStore.getSelectedAccount();
-    console.log(accountStore.$state.availableAccounts);
-    console.log(userStore.$state.loggedIn === true)
-    
-   
-    
+    await authStore.checkAuthStatus();
 
 })
 

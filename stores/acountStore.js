@@ -1,3 +1,4 @@
+import { defineStore } from "pinia";
 export const UseAccountStore = defineStore({
     id: 'account-store',
     state: () => {
@@ -11,9 +12,9 @@ export const UseAccountStore = defineStore({
      }
     } ,
     actions: {
-      getSelectedAccount(){
-        useWebApiFetch('/User/GetCurrentCandidateAccount')
-         .then(({data ,error}) =>{
+    async  getSelectedAccount(){
+       await useWebApiFetch('/User/GetCurrentCandidateAccount')
+         .then( async ({data ,error}) =>{
              if(data.value){
                 this.acountCandidate = data.value;
                 this.accountSelected = true;
@@ -23,7 +24,7 @@ export const UseAccountStore = defineStore({
              }
              else if(error.value){
                 
-                useWebApiFetch('/User/GetCurrentCompanyAccount')
+              await useWebApiFetch('/User/GetCurrentCompanyAccount')
                     .then(({data,error}) => {
                         if(data.value){
                             this.acountCandidate = null;
@@ -48,8 +49,8 @@ export const UseAccountStore = defineStore({
          })
  
      },
-     getAccountsForCurrentUser(){
-        useWebApiFetch('/User/GetAccountsForCurrentUser')
+    async getAccountsForCurrentUser(){
+       await useWebApiFetch('/User/GetAccountsForCurrentUser')
         .then(({data,error}) => {
           if(data.value){
              console.log(data);
@@ -63,9 +64,67 @@ export const UseAccountStore = defineStore({
         .finally(() => {
 
         })
-     }
-     }
+     },
+      createCandidateAccount(CreateCandidateAccountViewModel){
+        this.loading = true ;
+        useWebApiFetch('/User/CreateCandidateAccount', {
+            method: 'POST',
+            body: { ...CreateCandidateAccountViewModel.value },
+            onResponseError: ({ response }) => {
+                errorMsg.value = getErrorMessages(response, {}, {})
+            },
+        })
+        .then((response) => {
+             if(response.data.value){
+                const globalMessageStore = useMessageStore();
+                const router = useRouter();
+                globalMessageStore.showSuccessMessage("utworzono standardowe konto");
+                this.acountCandidate = response.data.value;
+                this.accountSelected = true;
+                this.accountType = candidateAccountType;
+                console.log("CANDIDATE HERE");
+                console.log(this.acountCandidate )
+                router.push({ path: '/' })   
+             }
+        })
+        .finally(() => {
+           this.loading = false;
+            
+        })
+    
+     },
+     createCompanyAccount(CreateCompanyAccountViewModel){
+        this.loading = true;
+        useWebApiFetch('/User/CreateCompanyAccount', {
+            method: 'POST',
+            body: { ...CreateCompanyAccountViewModel.value },
+            onResponseError: ({ response }) => {
+                errorMsg.value = getErrorMessages(response, {messageMap}, {fieldMap})
+                
+            },
+        })
+            .then((response) => {
+                if (response.data.value) { 
+                const globalMessageStore = useMessageStore();
+                const router = useRouter();
+                globalMessageStore.showSuccessMessage("utworzono kompany konto");
+                this.accountCompany = response.data.value;
+                this.accountSelected = true;
+                this.accountType = companyAccountType;
+                console.log("COMPANY HERE");
+                console.log(this.accountCompany )
+                router.push({ path: '/' })   
+                }
+                
+            })
+            .finally(() => {
+                this.loading = false;
+                
+    
+            })
+        }
     }
+}
 )
 
 const companyAccountType = "CompanyAccount";

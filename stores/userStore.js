@@ -12,8 +12,8 @@ export const useUserStore = defineStore({
     }
    } ,
    actions: {
-     getLoggedUser(){
-       useWebApiFetch('/User/GetCurrentUser')
+    async getLoggedUser(){
+      await useWebApiFetch('/User/GetCurrentUser')
         .then(({data ,error}) =>{
             if(data.value){
                 this.loggedIn = true;

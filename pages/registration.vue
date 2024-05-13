@@ -1,14 +1,14 @@
 <template>
-  <CreateUserDialog :state="state"></CreateUserDialog>
+  <CreateUserDialog ></CreateUserDialog>
   
   <div class="center-container">
-    <h1 v-if="!state.accountCreated && state.userCreated" class="main-heading">Nie posiadasz jeszcze konta - załóż je, aby w pełni korzystać z serwisu</h1>
-    <v-btn v-if="!state.candidateAccountCreated && state.userCreated" @click="options.candidateAccount = true" class="primary-btn">Załóż profil kandydata</v-btn>
-    <v-btn v-if="state.userCreated" @click="options.companyAccount = true" class="colorful-btn">Załóż profil firmy</v-btn>
+    <h1 v-if="!authStore.$state.anyAccountAvailable && authStore.$state.userLoggedIn" class="main-heading">Nie posiadasz jeszcze konta - załóż je, aby w pełni korzystać z serwisu</h1>
+    <v-btn v-if="showCandidateButtton" class="primary-btn" @click="options.candidateAccount = true">Załóż profil kandydata</v-btn>
+    <v-btn v-if="showCompanyButton" @click="options.companyAccount = true" class="colorful-btn">Załóż profil firmy</v-btn>
   </div>
 
-  <CreateCandidateAccount :state="state" :options="options"></CreateCandidateAccount>
-  <CreateCompanyAccount :state="state" :options="options"></CreateCompanyAccount>
+  <CreateCandidateAccount  :options="options"></CreateCandidateAccount>
+  <CreateCompanyAccount  :options="options"></CreateCompanyAccount>
 </template>
 
 <style>
@@ -34,7 +34,7 @@
 
 <script setup>
 
-
+const authStore = useAuthStore();
 const userStore = useUserStore();
 const accountStore = UseAccountStore();
 onMounted( () => {
@@ -48,6 +48,9 @@ const options = ref({
    candidateAccount: false,
    companyAccount: false 
 })
+
+const showCandidateButtton = computed(() => { return authStore.$state.userLoggedIn && !authStore.$state.candidateAccountCreated})
+const showCompanyButton = computed (() => { return authStore.$state.userLoggedIn })
 userStore.getLoggedUser();
 // const userCreated = computed(() => { return userStore.$state.loggedIn === true })
 // const AccountCreated = computed(() => { return accountStore.$state.availableAccounts !== null && accountStore.$state.availableAccounts.length > 0 })

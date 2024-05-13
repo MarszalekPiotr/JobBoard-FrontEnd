@@ -1,6 +1,6 @@
 <template>
   <div  class="pa-4 text-center">
-    <v-dialog class="custom-dialog" :model-value="accountStore.$state.accountSelected === false && userStore.$state.loggedIn === true" persistent width="auto" scrollable>
+    <v-dialog class="custom-dialog" :model-value="!authStore.loggedInAccountSelected && authStore.$state.userLoggedIn" persistent width="auto" scrollable>
 
       <v-divider class="mt-3"></v-divider>
 
@@ -73,30 +73,31 @@ const router = useRouter();
 accountStore.getSelectedAccount();
 accountStore.getAccountsForCurrentUser();
 userStore.getLoggedUser();
+const authStore = useAuthStore();
 
-userStore.$subscribe((mutation, state) => {    
-    if (state.loggedIn) {
-      if(accountStore.$state.availableAccounts === null ||accountStore.$state.availableAccounts?.length === 0 ){ 
-           router.push({path:"/registration"})
-      }
-      else{
-        router.push({path:"/"})
-      }
+// userStore.$subscribe((mutation, state) => {    
+//     if (state.loggedIn) {
+//       if(accountStore.$state.availableAccounts === null ||accountStore.$state.availableAccounts?.length === 0 ){ 
+//            router.push({path:"/registration"})
+//       }
+//       else{
+//         router.push({path:"/"})
+//       }
        
-    }
-})
+//     }
+// })
 
 
-accountStore.$subscribe((mutation, state) => {    
-      if(accountStore.$state.availableAccounts === null ||accountStore.$state.availableAccounts?.length === 0 ){ 
-           router.push({path:"/registration"})
-      }
-      else{
-        router.push({path:"/"})
-      }
+// accountStore.$subscribe((mutation, state) => {    
+//       if(accountStore.$state.availableAccounts === null ||accountStore.$state.availableAccounts?.length === 0 ){ 
+//            router.push({path:"/registration"})
+//       }
+//       else{
+//         router.push({path:"/"})
+//       }
        
-    }
-)
+//     }
+// )
 
 const accounts = computed(() => {
     console.log(accounts);
@@ -127,13 +128,14 @@ function submitSelectedAccount() {
         }
           })
           .then((response) => {
-                if(response.data.value !== null){
+                if(response.data.value){
                     accountStore.getSelectedAccount();
                     
                 }
           })
           .finally(() => {
             loading.value = false;
+            router.push({ path: '/' }) ; 
           }) 
       
       

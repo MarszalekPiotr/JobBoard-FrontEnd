@@ -44,10 +44,12 @@
 
 const router = useRouter();
 const globalMessageStore = useMessageStore();
+const authStore = useAuthStore();
+const accountStore = UseAccountStore();
 const { getErrorMessages } = UseErrorMessages();
 const { ruleRequired, ruleEmail } = useFormRules();
 const errorMsg = ref('');
-const loading = ref(false);
+const loading = computed( () => { return authStore.$state.loading })
 const CreateCandidateAccountViewModel = ref({
     Name:'',
     Description:'',
@@ -60,38 +62,17 @@ const CreateCandidateAccountViewModel = ref({
 const rules = {
     // samePassword : (v) => v === registrationViewModel.value.password || 'Hasła różnią się od siebie',
 }
-const props = defineProps([ 'state' , 'options'])
+const props = defineProps(['options'])
 
-const show = computed(() => { return props.state.userCreated && !props.state.candidateAccountCreated && props.options.candidateAccount })
+const show = computed(() => { return authStore.userLoggedIn && !authStore.$state.candidateAccountCreated && props.options.candidateAccount })
 const submit = async (event) => {  
 
     const { valid } = await event;
     if (valid) {
-        createUser();
+        accountStore.createCandidateAccount(CreateCandidateAccountViewModel);
     }
 
 }
 
-const createUser = () => {
-    loading.value = true ;
-    useWebApiFetch('/User/CreateCandidateAccount', {
-        method: 'POST',
-        body: { ...CreateCandidateAccountViewModel.value },
-        onResponseError: ({ response }) => {
-            errorMsg.value = getErrorMessages(response, {}, {})
-        },
-    })
-    .then((response) => {
-         if(response.data.value){
-            globalMessageStore.showSuccessMessage("utworzono standardowe konto");
-            router.push({ path: '/' })   
-         }
-    })
-    .finally(() => {
-        loading.value = false;
-        
-    })
 
-
-}
 </script>
