@@ -51,6 +51,8 @@
             </div>
         </v-main>
     </v-app>
+
+    <ConfirmDialog ref="confirmDialog"> </ConfirmDialog>
 </template>
 
 <script setup>
@@ -62,7 +64,7 @@ import { useUserStore } from '~/stores/userStore';
 import { UseAccountStore } from '~/stores/acountStore';
 
 
-
+const confirmDialog = ref(null);
 const currentTheme = useStorage('currentTheme', 'light')
 const theme = useTheme();
 const { mobile } = useDisplay();
@@ -71,10 +73,22 @@ const userStore = useUserStore();
 const accountStore = UseAccountStore();
 const router = useRouter();
 const authStore = useAuthStore();
+const globalMessageStore = useMessageStore();
 
 const logout = () => {
-    userStore.logOut();
-    window.location.reload();
+    const params = {
+        title: 'Wylogowanie',
+        text: 'Czy na pewno chcesz się wylogować?',
+        buttonText: 'Wyloguj',
+        buttonColor: 'Primary'
+    }
+    confirmDialog.value.show(params).
+        then(confirm => {
+            if (confirm) {
+                userStore.logOut();
+            }
+        })
+
 }
 
 const companyAccountType = "CompanyAccount";
