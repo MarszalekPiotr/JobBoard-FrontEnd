@@ -63,6 +63,7 @@ import { useStorage } from '@vueuse/core';
 import { useUserStore } from '~/stores/userStore';
 import { UseAccountStore } from '~/stores/acountStore';
 import { useAntiForgery } from '~/stores/antiForgeryStore';
+import { useAuthState } from '~/composables/authState';
 
 
 const confirmDialog = ref(null);
@@ -74,6 +75,7 @@ const userStore = useUserStore();
 const accountStore = UseAccountStore();
 const router = useRouter();
 const authStore = useAuthStore();
+const authState = useAuthState();
 const globalMessageStore = useMessageStore();
 const antiForgery = useAntiForgery();
 
@@ -130,6 +132,7 @@ await antiForgery.getToken()
 onMounted(async () => {
     theme.global.name.value = currentTheme.value;
     await authStore.checkAuthStatus();
+    await authState.checkAuthStatus();
 
 })
 
