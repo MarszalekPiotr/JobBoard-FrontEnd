@@ -1,6 +1,6 @@
 <template>
   <div  class="pa-4 text-center">
-    <v-dialog class="custom-dialog" :model-value="!authStore.loggedInAccountSelected && authStore.$state.userLoggedIn" persistent width="auto" scrollable>
+    <v-dialog class="custom-dialog" :model-value="!authState.loggedInAccountSelected.value && authState.userLoggedIn.value" persistent width="auto" scrollable>
 
       <v-divider class="mt-3"></v-divider>
 
@@ -74,6 +74,7 @@ accountStore.getSelectedAccount();
 accountStore.getAccountsForCurrentUser();
 userStore.getLoggedUser();
 const authStore = useAuthStore();
+const authState = useAuthState();
 
 // userStore.$subscribe((mutation, state) => {    
 //     if (state.loggedIn) {

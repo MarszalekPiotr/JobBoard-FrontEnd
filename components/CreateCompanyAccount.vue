@@ -36,13 +36,14 @@
 
 <script setup>
 const authStore = useAuthStore();
+const authState = useAuthState();
 const router = useRouter();
 const accountStore = UseAccountStore();
 const globalMessageStore = useMessageStore();
 const { getErrorMessages } = UseErrorMessages();
 const { ruleRequired, ruleEmail } = useFormRules();
 const errorMsg = ref('');
-const loading = computed( () => { return authStore.$state.loading })
+const loading = computed( () => { return authState.loading.value })
 const CreateCompanyAccountViewModel = ref({
     Name: '',
     Description: '',
@@ -55,7 +56,7 @@ const rules = {
 }
 const props = defineProps([ 'options'])
 
-const show = computed(() => { return authStore.userLoggedIn && props.options.companyAccount })
+const show = computed(() => { return authState.userLoggedIn.value && props.options.companyAccount })
 const submit = async (event) => {
 
     const { valid } = await event;

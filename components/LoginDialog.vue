@@ -28,16 +28,18 @@
 </style>
 
 <script setup>
+import { useAuthState } from '~/composables/authState';
 import { useFormRules } from '~/utils/fromValidationRules';
 import { UseErrorMessages } from '~/utils/getErrorMessages';
 
 const authStore = useAuthStore();
+const authState = useAuthState();
 const accountStore = UseAccountStore();
 const userStore = useUserStore();
 const globalMessageStore = useMessageStore();
 
 const showDialog = computed(() => {
-   return  !authStore.$state.userLoggedIn || authStore.$state.loading;
+   return  !authState.userLoggedIn.value || authState.loading.value;
 })
 
 const loginViewModel =
@@ -77,7 +79,7 @@ const login = () =>{
        })
        .then((response) => {
          if(response.data.value){
-            authStore.checkAuthStatus();
+            authState.checkAuthStatus();
             loginViewModel.value.password = ''
             globalMessageStore.showSuccessMessage("Pomyślnie zalogowano")
             

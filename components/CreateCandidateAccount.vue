@@ -45,11 +45,12 @@
 const router = useRouter();
 const globalMessageStore = useMessageStore();
 const authStore = useAuthStore();
+const authState = useAuthState();
 const accountStore = UseAccountStore();
 const { getErrorMessages } = UseErrorMessages();
 const { ruleRequired, ruleEmail } = useFormRules();
 const errorMsg = ref('');
-const loading = computed( () => { return authStore.$state.loading })
+const loading = computed( () => { return authState.loading.value })
 const CreateCandidateAccountViewModel = ref({
     Name:'',
     Description:'',
@@ -64,7 +65,7 @@ const rules = {
 }
 const props = defineProps(['options'])
 
-const show = computed(() => { return authStore.userLoggedIn && !authStore.$state.candidateAccountCreated && props.options.candidateAccount })
+const show = computed(() => { return authState.userLoggedIn.value && !authState.candidateAccountCreated.value && props.options.candidateAccount })
 const submit = async (event) => {  
 
     const { valid } = await event;
