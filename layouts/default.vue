@@ -62,6 +62,7 @@ import { useTheme } from 'vuetify';
 import { useStorage } from '@vueuse/core';
 import { useUserStore } from '~/stores/userStore';
 import { UseAccountStore } from '~/stores/acountStore';
+import { useAntiForgery } from '~/stores/antiForgeryStore';
 
 
 const confirmDialog = ref(null);
@@ -74,6 +75,7 @@ const accountStore = UseAccountStore();
 const router = useRouter();
 const authStore = useAuthStore();
 const globalMessageStore = useMessageStore();
+const antiForgery = useAntiForgery();
 
 const logout = () => {
     const params = {
@@ -124,6 +126,7 @@ function toggleTheme() {
 
 }
 
+await antiForgery.getToken()
 onMounted(async () => {
     theme.global.name.value = currentTheme.value;
     await authStore.checkAuthStatus();

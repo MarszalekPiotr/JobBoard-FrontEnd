@@ -1,7 +1,13 @@
 import { hash } from 'ohash'
+import { useAntiForgery } from '../stores/antiForgeryStore';
 
 export  const  useWebApiFetch =  function (request, opts) {
-    const config = useRuntimeConfig()
+    const config = useRuntimeConfig();
+    const antiForgery = useAntiForgery();
+
+    opts = opts || {}
+    opts.headers = opts.headers || {}
+    opts.headers['X-XSRF-TOKEN'] = antiForgery.$state.token;
 
     return  useFetch(request, { baseURL: config.public.BASE_URL,
         onRequest({ request, options }) {
