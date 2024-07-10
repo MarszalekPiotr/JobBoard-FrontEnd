@@ -6,7 +6,8 @@
     <v-btn v-if="showCandidateButtton" class="primary-btn" @click="options.candidateAccount = true">Załóż profil kandydata</v-btn>
     <v-btn v-if="showCompanyButton" @click="options.companyAccount = true" class="colorful-btn">Załóż profil firmy</v-btn>
   </div>
-
+ 
+  <!-- tutaj if do wyswietlania  -->
   <CreateCandidateAccount  :options="options"></CreateCandidateAccount>
   <CreateCompanyAccount  :options="options"></CreateCompanyAccount>
 </template>

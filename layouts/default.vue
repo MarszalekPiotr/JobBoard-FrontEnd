@@ -56,21 +56,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useDisplay } from 'vuetify'
-import { useTheme } from 'vuetify';
-import { useStorage } from '@vueuse/core';
-import { useUserStore } from '~/stores/userStore';
-import { UseAccountStore } from '~/stores/acountStore';
-import { useAntiForgery } from '~/stores/antiForgeryStore';
-import { useAuthState } from '~/composables/authState';
 
+import { useStorage } from '@vueuse/core';
+import { useTheme } from 'vuetify';
+import { useDisplay } from 'vuetify';
 
 const confirmDialog = ref(null);
 const currentTheme = useStorage('currentTheme', 'light')
 const theme = useTheme();
 const { mobile } = useDisplay();
-const drawer = ref(null)
+const drawer = ref(null);
 const userStore = useUserStore();
 const accountStore = UseAccountStore();
 const router = useRouter();
@@ -94,10 +89,6 @@ const logout = () => {
         })
 
 }
-
-const companyAccountType = "CompanyAccount";
-const candidateAccountType = "CandidateAccount";
-
 
 const menuItems = [
     {

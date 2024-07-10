@@ -1,6 +1,7 @@
 
 export const useAuthState = () =>{
-   
+    const companyAccountType = "CompanyAccount";
+    const candidateAccountType = "CandidateAccount";
       const userStore = useUserStore();
       const accountStore = UseAccountStore();
         return {
@@ -15,7 +16,7 @@ export const useAuthState = () =>{
         currentUser :computed(() => { return userStore.$state.userData }) ,
         userLoggedIn :computed(() => { return userStore.$state.loggedIn}) ,
         loading : computed(() =>{return userStore.$state.loading || accountStore.$state.loading}),
-
+        
         async checkAuthStatus(){
             
             const userStore = useUserStore();
@@ -26,4 +27,6 @@ export const useAuthState = () =>{
             
         }
 }
+
+
 }

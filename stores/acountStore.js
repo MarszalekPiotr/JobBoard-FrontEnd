@@ -12,7 +12,62 @@ export const UseAccountStore = defineStore({
      }
     } ,
     actions: {
-    async  getSelectedAccount(){
+
+        // nowa metoda get selected account
+        async getSelectedAccount(){
+           await useWebApiFetch('User/GetCurrentAccount')
+           .then(async ({data,error}) => {
+             if(data.value){
+                this.accountType = data.value.accountType;
+                 if(this.accountType === 'CandidateAccount')  {
+                     await useWebApiFetch('/User/GetCurrentCandidateAccount')
+                     .then(({data,error}) => {
+                        if(data.value){
+                             this.acountCandidate = data.value;
+                             this.accountSelected = true;
+                             this.accountType = candidateAccountType;
+                             this.accountCompany = null; 
+                        }
+                        else if(error.value){
+                            this.acountCandidate = null;
+                            this.accountSelected = false;
+                            this.accountType = "";
+                            this.accountCompany = null; 
+
+                        }
+                     })
+                 }
+                 else if(this.accountType === 'CompanyAccount'){
+                    await useWebApiFetch('/User/GetCurrentCompanyAccount')
+                        .then(({data,error}) => {
+                            if(data.value){
+                                this.acountCandidate = null;
+                                this.accountSelected = true;
+                                this.accountType = companyAccountType;
+                                this.accountCompany = data.value; 
+                            }
+                            else if(error.value){
+                                this.acountCandidate = null;
+                                this.accountSelected = false;
+                                this.accountType = "";
+                                this.accountCompany = null; 
+    
+                            }
+                        })
+                 }                 
+ 
+             }
+             else if(error.value){
+                this.acountCandidate = null;
+                this.accountSelected = false;
+                this.accountType = "";
+                this.accountCompany = null; 
+             }
+           } )   
+
+
+        },
+    async  getSelectedAccountOld(){
        await useWebApiFetch('/User/GetCurrentCandidateAccount')
          .then( async ({data ,error}) =>{
              if(data.value){

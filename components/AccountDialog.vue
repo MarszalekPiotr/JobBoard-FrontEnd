@@ -7,7 +7,7 @@
       <v-card-text class="px-4" style="height: 300px;">
         <VCardTitle class="text-center" style="font-size: 24px;">Wybierz konto</VCardTitle>
         <v-radio-group v-model="dialog" column>
-          <v-radio v-for="(account, index) in accounts" :key="account.accountId" :label="account.accountName" :value="account.accountId" class="brighter-font"></v-radio>
+          <v-radio v-for="(account, index) in accounts" :key="account.accountId" :label="account.accountName" :value="account" class="brighter-font"></v-radio>
         </v-radio-group>
       </v-card-text>
 
@@ -76,33 +76,13 @@ userStore.getLoggedUser();
 const authStore = useAuthStore();
 const authState = useAuthState();
 
-// userStore.$subscribe((mutation, state) => {    
-//     if (state.loggedIn) {
-//       if(accountStore.$state.availableAccounts === null ||accountStore.$state.availableAccounts?.length === 0 ){ 
-//            router.push({path:"/registration"})
-//       }
-//       else{
-//         router.push({path:"/"})
-//       }
-       
-//     }
-// })
 
 
-// accountStore.$subscribe((mutation, state) => {    
-//       if(accountStore.$state.availableAccounts === null ||accountStore.$state.availableAccounts?.length === 0 ){ 
-//            router.push({path:"/registration"})
-//       }
-//       else{
-//         router.push({path:"/"})
-//       }
-       
-//     }
-// )
 
 const accounts = computed(() => {
-    console.log(accounts);
+  console.log(accounts);
    return  accountStore.$state.availableAccounts;
+   console.log("eeee");
 })
 
 
@@ -123,7 +103,9 @@ function submitSelectedAccount() {
        
        useWebApiFetch('/User/SetCurrentAccount', 
        {method:'POST' ,
-        body:{"accountId" : selectedAccount},
+        body:{"accountId" : selectedAccount.accountId,
+          "accountType" : selectedAccount.accountType
+        },
         OnResponseError: ({response}) =>{
         errorMsg.value = getErrorMessages(response, errorMap  ,{} )
         }
