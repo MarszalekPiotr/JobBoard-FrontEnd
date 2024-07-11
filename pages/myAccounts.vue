@@ -8,7 +8,7 @@
             <VListItemSubtitle class="grey--text">{{ acc.accountType }}</VListItemSubtitle>
           </VListItemContent>
           <VListItemAction>
-            <VBtn :loading = "loading" @click="selectAccount(acc.accountId)" color="primary">Select</VBtn>
+            <VBtn :loading = "loading" @click="selectAccount(acc.accountId,acc.accountType)" color="primary">Select</VBtn>
           </VListItemAction>
         </VListItem>
   
@@ -19,7 +19,7 @@
             <VListItemSubtitle class="grey--text">{{ acc.accountType }}</VListItemSubtitle>
           </VListItemContent>
           <VListItemAction>
-            <VBtn :loading = "loading" @click="selectAccount(acc.accountId)" color="primary">Select</VBtn>
+            <VBtn :loading = "loading" @click="selectAccount(acc.accountId,acc.accountType)" color="primary">Select</VBtn>
           </VListItemAction>
         </VListItem>
       </VList>
@@ -78,18 +78,20 @@ const {getErrorMessages} = UseErrorMessages();
 const errorMap = { "Unauthorized" : "Odmowa dostępu"}
 const loading = ref(false);
 const router = useRouter();
-const selectAccount = (accountId) =>{
+const selectAccount = (accountId,accountType) =>{
        loading.value = true; 
     useWebApiFetch('/User/SetCurrentAccount', 
        {method:'POST' ,
-        body:{"accountId" : accountId},
+        body:{"accountId" : accountId ,
+              "accountType": accountType
+        },
         OnResponseError: ({response}) =>{
         errorMsg.value = getErrorMessages(response, errorMap  ,{} )
         }
           })
-          .then((response) => {
+          .then(async (response) => {
                 if(response.data.value !== null){
-                    accountStore.getSelectedAccount();
+                   await authState.checkAuthStatus();
                     
                     
                 }
@@ -101,15 +103,15 @@ const selectAccount = (accountId) =>{
           }) 
 }
 
+const authState = useAuthState();
+onMounted(async () =>{ 
+  await authState.checkAuthStatus();
+})
 
-const accountStore = UseAccountStore();
-accountStore.getAccountsForCurrentUser();
+const candidateAccounts = computed(() => { return authState.availableAccounts.value?.filter(acc => acc.accountType === candidateAccountType) });
 
-const candidateAccounts = computed(() => { return accountStore.$state.availableAccounts?.filter(acc => acc.accountType === candidateAccountType) });
+const companyAccounts = computed(() => { return authState.availableAccounts.value?.filter(acc => acc.accountType === companyAccountType) });
 
-const companyAccounts = computed(() => { return accountStore.$state.availableAccounts?.filter(acc => acc.accountType === companyAccountType) });
-
-console.log(companyAccounts.value);
 
 
 

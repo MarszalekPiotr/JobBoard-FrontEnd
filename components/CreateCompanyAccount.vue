@@ -1,5 +1,8 @@
 <template>
-    <VDialog :model-value="show" persistent width="400" scroll-strategy="none">
+   
+   <v-btn  @click="show = true" class="colorful-btn">Załóż profil firmy</v-btn>
+   
+   <VDialog :model-value="show" persistent width="400" scroll-strategy="none">
         <VCard class="py-4">
             <VCardTitle class="text-center">Załóż konto firmowe</VCardTitle>
             <div v-if="loading" class="pa-4 d-flex justify-center">
@@ -54,9 +57,9 @@ const CreateCompanyAccountViewModel = ref({
 const rules = {
     // samePassword : (v) => v === registrationViewModel.value.password || 'Hasła różnią się od siebie',
 }
-const props = defineProps([ 'options'])
 
-const show = computed(() => { return authState.userLoggedIn.value && props.options.companyAccount })
+
+const show = ref(false);
 const submit = async (event) => {
 
     const { valid } = await event;

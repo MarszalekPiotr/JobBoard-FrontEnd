@@ -3,7 +3,7 @@
 <VDialog :model-value ="showDialog" persistent width="400" scroll-strategy="none">
     <VCard class="py-4">
     <VCardTitle class="text-center">Logowanie</VCardTitle>
-    <div v-if="userStore.$state.loading === true" class="pa-4 d-flex justify-center">
+    <div v-if="authState.loading.value" class="pa-4 d-flex justify-center">
     <v-progress-circular indeterminate color="red"></v-progress-circular>
    </div>
     <VForm v-else @submit.prevent = "submit" :disabled= "loading" >
@@ -30,9 +30,8 @@
 <script setup>
 
 
-const authStore = useAuthStore();
+
 const authState = useAuthState();
-const accountStore = UseAccountStore();
 const userStore = useUserStore();
 const globalMessageStore = useMessageStore();
 
@@ -57,8 +56,6 @@ const {ruleEmail , ruleRequired} = useFormRules();
        
     }
 }
-
-
 
 const loading = ref(false);
 const errorMsg = ref("");

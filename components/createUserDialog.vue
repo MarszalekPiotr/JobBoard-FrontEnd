@@ -32,9 +32,7 @@
 <style></style>
 
 <script setup>
-const globalMessageStore = useMessageStore();
-const userStore= useUserStore();
-const authStore = useAuthStore();
+const globalMessageStore = useMessageStore();;
 const authState = useAuthState();
 const { getErrorMessages } = UseErrorMessages();
 const { ruleRequired, ruleEmail } = useFormRules();
@@ -48,7 +46,6 @@ const registrationViewModel = ref({
 const rules = {
     samePassword : (v) => v === registrationViewModel.value.password || 'Hasła różnią się od siebie',
 }
-const props = defineProps(['state'])
 
 const submit = async (event) => {
 
@@ -70,7 +67,7 @@ const createUser = () => {
     })
     .then((response) => {
          if(response.data.value !== null){
-          userStore.getLoggedUser();
+          authState.checkAuthStatus();
           globalMessageStore.showSuccessMessage("utworzono profil")
 
          }

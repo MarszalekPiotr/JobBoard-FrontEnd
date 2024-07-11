@@ -1,6 +1,6 @@
 <template>
   <div  class="pa-4 text-center">
-    <v-dialog class="custom-dialog" :model-value="!authState.loggedInAccountSelected.value && authState.userLoggedIn.value" persistent width="auto" scrollable>
+    <v-dialog class="custom-dialog" :model-value="authState.loggedInNoAccountSelected" persistent width="auto" scrollable>
 
       <v-divider class="mt-3"></v-divider>
 
@@ -66,28 +66,18 @@
 
 <script setup>
 import { ref } from 'vue'
-
-const userStore = useUserStore();
 const accountStore = UseAccountStore();
 const router = useRouter();
-accountStore.getSelectedAccount();
-accountStore.getAccountsForCurrentUser();
-userStore.getLoggedUser();
-const authStore = useAuthStore();
 const authState = useAuthState();
-
-
-
-
+onMounted(() =>{
+  authState.checkAuthStatus();
+})
 const accounts = computed(() => {
   console.log(accounts);
-   return  accountStore.$state.availableAccounts;
+   return  authState.availableAccounts.value;
    console.log("eeee");
 })
 
-
-
-// let accounts = accountStore.$state.availableAccounts;
 
 const errorMsg = ref('');
 const loading= ref(false);
@@ -122,15 +112,9 @@ function submitSelectedAccount() {
           }) 
       
       
-      // Perform actions with the selected account, e.g., save it
-      // Example:
-      // accountStore.saveSelectedAccount(selectedAccount)
-
-      // Close the dialog
+      
       
     }
   }
-const companyAccountType = "Company";
-const candidateAccountType = "Candidate";
 
 </script>

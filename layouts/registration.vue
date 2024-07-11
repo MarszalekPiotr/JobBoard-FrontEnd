@@ -13,12 +13,8 @@
 
 <script setup>
 
-const userStore = useUserStore();
-const accountStore = UseAccountStore();
+const authState = useAuthState();
 onMounted( () => {
-  userStore.getLoggedUser();
-  accountStore.getAccountsForCurrentUser();
-  console.log("elooo");
-
+  authState.checkAuthStatus();
 });
 </script>
