@@ -108,8 +108,6 @@ export const UseAccountStore = defineStore({
        await useWebApiFetch('/User/GetAccountsForCurrentUser')
         .then(({data,error}) => {
           if(data.value){
-             console.log(data);
-             console.log(data.value);
               this.availableAccounts = data.value
           }
           else if(error.value){
@@ -137,8 +135,6 @@ export const UseAccountStore = defineStore({
                 this.acountCandidate = response.data.value;
                 this.accountSelected = true;
                 this.accountType = candidateAccountType;
-                console.log("CANDIDATE HERE");
-                console.log(this.acountCandidate )
                 router.push({ path: '/' })   
              }
         })
@@ -166,8 +162,6 @@ export const UseAccountStore = defineStore({
                 this.accountCompany = response.data.value;
                 this.accountSelected = true;
                 this.accountType = companyAccountType;
-                console.log("COMPANY HERE");
-                console.log(this.accountCompany )
                 router.push({ path: '/' })   
                 }
                 

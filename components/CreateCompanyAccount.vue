@@ -17,8 +17,7 @@
                     <v-text-field class="mb-4" variant="outlined" :rules=[ruleRequired]
                         v-model="CreateCompanyAccountViewModel.ContactEmail" type=""
                         label="E-mail kontaktowy"></v-text-field>
-                    <v-text-field class="mb-4" variant="outlined" :rules=[ruleRequired]
-                        v-model="CreateCompanyAccountViewModel.NIP" type="" label="NIP"></v-text-field>
+                  
 
                     <!-- <v-date-picker v-model="CreateCandidateAccountViewModel.BirthDate" type = "date" :rules=[ruleRequired] label ="Data urodzenia">    </v-date-picker> -->
                 </VCardText>
@@ -38,20 +37,16 @@
 <style></style>
 
 <script setup>
-const authStore = useAuthStore();
-const authState = useAuthState();
-const router = useRouter();
 const accountStore = UseAccountStore();
-const globalMessageStore = useMessageStore();
 const { getErrorMessages } = UseErrorMessages();
 const { ruleRequired, ruleEmail } = useFormRules();
 const errorMsg = ref('');
-const loading = computed( () => { return authState.loading.value })
+const {loading} = useAuthState(); 
 const CreateCompanyAccountViewModel = ref({
     Name: '',
     Description: '',
     ContactEmail: '',
-    NIP: ''
+   
 
 });
 const rules = {

@@ -41,15 +41,12 @@
 
 <script setup>
 
-const router = useRouter();
-const globalMessageStore = useMessageStore();
-const authStore = useAuthStore();
-const authState = useAuthState();
+
 const accountStore = UseAccountStore();
 const { getErrorMessages } = UseErrorMessages();
 const { ruleRequired, ruleEmail } = useFormRules();
 const errorMsg = ref('');
-const loading = computed( () => { return authState.loading.value })
+const {loading} = useAuthState();
 const CreateCandidateAccountViewModel = ref({
     Name:'',
     Description:'',

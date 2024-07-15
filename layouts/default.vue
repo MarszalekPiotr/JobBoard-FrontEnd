@@ -5,7 +5,7 @@
 
         <AccountDialog> </AccountDialog>
 
-        <v-app-bar v-if="authState.userLoggedIn.value" color="layout">
+        <v-app-bar v-if="userLoggedIn" color="layout">
             <v-app-bar-nav-icon v-if="mobile" @click="drawer = !drawer"></v-app-bar-nav-icon>
 
             <v-app-bar-title> JobBoard </v-app-bar-title>
@@ -13,22 +13,22 @@
             <VBtn icon="mdi-theme-light-dark" title="zmień motyw" @click="toggleTheme"> </VBtn>
         </v-app-bar>
 
-        <v-navigation-drawer v-if="authState.userLoggedIn.value" color="layout" :order="mobile ? -1 : 0"
+        <v-navigation-drawer v-if="userLoggedIn" color="layout" :order="mobile ? -1 : 0"
             v-model="drawer">
             <VList>
                 <v-list-item lines="two">
                     <template v-slot:prepend>
-                        <v-avatar color="brand" v-if="authState.currentUser.value">
-                            {{ authState.currentUser.value.email[0].toUpperCase() }}
+                        <v-avatar color="brand" v-if="currentUser">
+                            {{ currentUser.email[0].toUpperCase() }}
                         </v-avatar>
                     </template>
-                    <VListItemTitle v-if="authState.currentCompanyAccount.value">{{
-                        authState.currentCompanyAccount.value?.name }} </VListItemTitle>
-                    <VListItemTitle v-if="authState.currentCandidateAccount.value">{{
-                        authState.currentCandidateAccount.value?.name }} </VListItemTitle>
-                    <VListItemTitle v-if="authState.loggedInNoAccountSelected.value">Nie wybrano konta
+                    <VListItemTitle v-if="currentCompanyAccount !== null">{{
+                        currentCompanyAccount.name }} </VListItemTitle>
+                    <VListItemTitle v-if="currentCandidateAccount !== null">{{
+                       currentCandidateAccount.name }} </VListItemTitle>
+                    <VListItemTitle v-if="loggedInNoAccountSelected">Nie wybrano konta
                     </VListItemTitle>
-                    <VListItemSubtitle v-if="authState.currentUser.value">{{ authState.currentUser.value.email
+                    <VListItemSubtitle v-if="currentUser">{{ currentUser.email
                         }}
                     </VListItemSubtitle>
                 </v-list-item>
@@ -47,7 +47,7 @@
 
         <v-main>
             <div class="pa-4">
-                <NuxtPage v-if="authState.loggedInAccountSelected.value === true" />
+                <NuxtPage v-if="loggedInAccountSelected" />
             </div>
         </v-main>
     </v-app>
@@ -57,9 +57,14 @@
 
 <script setup>
 
-import { useStorage } from '@vueuse/core';
-import { useTheme } from 'vuetify';
-import { useDisplay } from 'vuetify';
+import { useStorage } from '@vueuse/core'
+import {useTheme, useDisplay} from  'vuetify'
+const {currentUser,
+      loggedInAccountSelected,
+      loggedInNoAccountSelected,
+      currentCandidateAccount,
+      currentCompanyAccount,
+      userLoggedIn} = useAuthState();
 
 const confirmDialog = ref(null);
 const currentTheme = useStorage('currentTheme', 'light')
@@ -67,7 +72,6 @@ const theme = useTheme();
 const { mobile } = useDisplay();
 const drawer = ref(null);
 const userStore = useUserStore();
-const authStore = useAuthStore();
 const authState = useAuthState();
 const antiForgery = useAntiForgery();
 

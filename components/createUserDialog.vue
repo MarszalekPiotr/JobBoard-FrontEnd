@@ -1,7 +1,7 @@
 <template>
 
 
-    <VDialog :model-value="!authState.userLoggedIn.value" persistent width="400" scroll-strategy="none">
+    <VDialog :model-value="userLoggedIn.value" persistent width="400" scroll-strategy="none">
         <VCard class="py-4">
             <VCardTitle class="text-center">Rejestracja</VCardTitle>
             <div v-if="loading" class="pa-4 d-flex justify-center">
@@ -32,8 +32,9 @@
 <style></style>
 
 <script setup>
-const globalMessageStore = useMessageStore();;
-const authState = useAuthState();
+const globalMessageStore = useMessageStore();
+const {userLoggedIn, checkAuthStatus} = useAuthState();
+
 const { getErrorMessages } = UseErrorMessages();
 const { ruleRequired, ruleEmail } = useFormRules();
 const errorMsg = ref('');
@@ -67,7 +68,7 @@ const createUser = () => {
     })
     .then((response) => {
          if(response.data.value !== null){
-          authState.checkAuthStatus();
+          checkAuthStatus();
           globalMessageStore.showSuccessMessage("utworzono profil")
 
          }
