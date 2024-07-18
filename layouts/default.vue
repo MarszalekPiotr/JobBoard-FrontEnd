@@ -64,7 +64,8 @@ const {currentUser,
       loggedInNoAccountSelected,
       currentCandidateAccount,
       currentCompanyAccount,
-      userLoggedIn} = useAuthState();
+      userLoggedIn,
+     anyAccountAvailable} = useAuthState();
 
 const confirmDialog = ref(null);
 const currentTheme = useStorage('currentTheme', 'light')
@@ -124,6 +125,10 @@ await antiForgery.getToken()
 onMounted(async () => {
     theme.global.name.value = currentTheme.value;
     await authState.checkAuthStatus();
+    if(!anyAccountAvailable.value && userLoggedIn){
+        const router = useRouter();
+        router.push({ path: '/registration' });
+    }
 
 })
 

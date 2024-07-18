@@ -1,7 +1,7 @@
 <template>
 
 
-    <VDialog :model-value="userLoggedIn.value" persistent width="400" scroll-strategy="none">
+    <VDialog :model-value="!userLoggedIn" persistent width="400" scroll-strategy="none">
         <VCard class="py-4">
             <VCardTitle class="text-center">Rejestracja</VCardTitle>
             <div v-if="loading" class="pa-4 d-flex justify-center">

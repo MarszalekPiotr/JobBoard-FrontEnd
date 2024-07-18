@@ -108,6 +108,7 @@ export const UseAccountStore = defineStore({
        await useWebApiFetch('/User/GetAccountsForCurrentUser')
         .then(({data,error}) => {
           if(data.value){
+              console.log(data.value);
               this.availableAccounts = data.value
           }
           else if(error.value){
@@ -158,7 +159,7 @@ export const UseAccountStore = defineStore({
                 if (response.data.value) { 
                 const globalMessageStore = useMessageStore();
                 const router = useRouter();
-                globalMessageStore.showSuccessMessage("utworzono kompany konto");
+                globalMessageStore.showSuccessMessage("utworzono company konto");
                 this.accountCompany = response.data.value;
                 this.accountSelected = true;
                 this.accountType = companyAccountType;

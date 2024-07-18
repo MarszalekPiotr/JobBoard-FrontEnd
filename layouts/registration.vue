@@ -16,5 +16,6 @@
 const authState = useAuthState();
 onMounted( () => {
   authState.checkAuthStatus();
+  
 });
 </script>

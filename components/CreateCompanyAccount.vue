@@ -38,7 +38,6 @@
 
 <script setup>
 const accountStore = UseAccountStore();
-const { getErrorMessages } = UseErrorMessages();
 const { ruleRequired, ruleEmail } = useFormRules();
 const errorMsg = ref('');
 const {loading} = useAuthState(); 

@@ -13,9 +13,10 @@
 <script setup>
 
 const {userLoggedIn, candidateAccountCreated, anyAccountAvailable} = useAuthState();
-const showCandidateButtton = computed(() => userLoggedIn.value && !candidateAccountCreated);
-const showCompanyButton = computed(() => userLoggedIn.value);
+const showCandidateButtton = computed(() => userLoggedIn && !candidateAccountCreated.value);
+const showCompanyButton = computed(() => userLoggedIn);
 
+console.log(candidateAccountCreated.value)
 definePageMeta({
   layout: "registration",
 });
